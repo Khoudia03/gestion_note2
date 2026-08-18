@@ -1,33 +1,76 @@
-CREATE TABLE roles (
+CREATE Table statuts(
     id SERIAL PRIMARY KEY,
-    nomRole VARCHAR(50) NOT NULL UNIQUE
+    nom VARCHAR(50) NOT NULL
 );
-CREATE TABLE utilisateurs (
+
+CREATE TABLE eleves(
     id SERIAL PRIMARY KEY,
-    nom VARCHAR(50) NOT NULL,
-    prenom VARCHAR(50) NOT NULL,
-    email VARCHAR(100) NOT NULL UNIQUE,
-    motDePasse VARCHAR(255) NOT NULL,
-    idRole INT NOT NULL REFERENCES roles(id)
+    id_responsable int REFERENCES responsables(id),
+    ref VARCHAR(50) not NULL,
+    prenom VARCHAR(50) not NULL,
+    nom VARCHAR(50) not NULL,
+    numero VARCHAR(50) not NULL,
+    adresse VARCHAR(50) DEFAULT null,
+    id_statut int REFERENCES statuts(id)
 );
-CREATE TABLE anneescolaires (
+
+CREATE TABLE responsables(
     id SERIAL PRIMARY KEY,
-    libelle VARCHAR(50) NOT NULL UNIQUE
+    prenom VARCHAR(50) not NULL,
+    nom VARCHAR(50) not NULL,
+    numero VARCHAR(50) not NULL,
+    adresse VARCHAR(50) NOT NULL
 );
-CREATE TABLE classes (
+
+
+
+CREATE TABLE utilisateurs(
     id SERIAL PRIMARY KEY,
-    nomClasse VARCHAR(100) NOT NULL UNIQUE
+    prenom VARCHAR(50) not NULL,
+    nom VARCHAR(50) not NULL,
+    login VARCHAR(50) UNIQUE NOT NULL,
+    password VARCHAR(50) NOT NULL,
+    role_id int REFERENCES roles(id)
 );
-CREATE TABLE eleves (
+
+
+
+CREATE TABLE roles(
     id SERIAL PRIMARY KEY,
-    nom VARCHAR(50) NOT NULL,
-    prenom VARCHAR(50) NOT NULL,
-    matricule VARCHAR(50) NOT NULL UNIQUE
+    role VARCHAR(50) NOT null
 );
-CREATE TABLE inscriptions (
+
+CREATE TABLE anneeScolaires(
     id SERIAL PRIMARY KEY,
-    idEleve INT NOT NULL REFERENCES eleves(id),
-    idClasse INT NOT NULL REFERENCES classes(id),
-    idAnneeScolaire INT NOT NULL REFERENCES anneescolaires(id),
-    UNIQUE(idEleve, idAnneeScolaire)
+    annee VARCHAR(50) 
+);
+
+CREATE Table etablissements(
+    id SERIAL PRIMARY KEY,
+    nom VARCHAR(50) NOT null unique
+);
+
+CREATE Table classes(
+    id SERIAL PRIMARY KEY,
+    id_etablissement int REFERENCES etablissements(id),
+    nom VARCHAR(50) NOT null unique
+);
+
+
+
+CREATE Table inscriptions(
+    id SERIAL PRIMARY KEY,
+    id_eleve int REFERENCES eleves(id),
+    id_annee int REFERENCES anneeScolaires(id),
+    id_classe int REFERENCES classes(id),
+    id_utilisateur int REFERENCES utilisateurs(id)
+
+);
+ALTER TABLE inscriptions
+DROP COLUMN id_transfert;
+
+CREATE TABLE transferts(
+    id SERIAL PRIMARY KEY,
+    type_de_transfert VARCHAR(100) NOT NULL CHECK(type_de_transfert IN('ENTRANT', 'SORTANT')),
+    id_inscription int REFERENCES inscriptions(id)
 );
