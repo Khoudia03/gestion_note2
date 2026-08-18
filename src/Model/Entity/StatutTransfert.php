@@ -2,7 +2,7 @@
 
 namespace GestionNotePooV2\Entity;
 
-class Role
+class StatutTransfert
 {
     private int $id;
     private string $nom;
@@ -30,10 +30,5 @@ class Role
     public function setnom(string $nom): void
     {
         $this->nom = $nom;
-    }
-
-    public static function toEntity(\stdClass $obj): self
-    {
-        return new self(nom: $obj->nom_role);
     }
 }

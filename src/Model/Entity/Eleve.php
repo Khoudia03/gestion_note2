@@ -1,30 +1,82 @@
 <?php
 
-namespace App\Model\Entity;
+namespace GestionNotePooV2\Entity;
 
-class Eleve {
-    public ?int $id;
-    public string $nom;
-    public string $prenom;
-    public string $matricule;
-    public array $inscriptions;
+class Eleve
+{
+    private int $id;
+    private string $nomcomplet;
+    private string $matricule;
+    private Responsable $responsable;
+    private \DateTime $dateNaissance;
 
-     public function __construct(?int $id, string $nom, string $prenom, string $matricule, array $inscriptions = [])
+    public function __construct(string $nomcomplet, string $matricule, Responsable $responsable, \DateTime $dateNaissance)
+    {
+        $this->nomcomplet = $nomcomplet;
+        $this->matricule = $matricule;
+        $this->responsable = $responsable;
+        $this->dateNaissance = $dateNaissance;
+    }
+
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    public function getNomComplet(): string
+    {
+        return $this->nomcomplet;
+    }
+
+    public function getMatricule(): string
+    {
+        return $this->matricule;
+    }
+
+    public function getResponsable(): Responsable
+    {
+        return $this->responsable;
+    }
+
+    public function getDateNaissance(): \DateTime
+    {
+        return $this->dateNaissance;
+    }
+
+    public function setId(int $id): void
     {
         $this->id = $id;
-        $this->nom = $nom;
-        $this->prenom = $prenom;
+    }
+
+    public function setNomComplet(string $nomcomplet): void
+    {
+        $this->nomcomplet = $nomcomplet;
+    }
+
+    public function setMatricule(string $matricule): void
+    {
         $this->matricule = $matricule;
-        $this->inscriptions = $inscriptions;
     }
 
-    public function getInscription(): array
+    public function setResponsable(Responsable $responsable): void
     {
-        return $this->inscriptions;
+        $this->responsable = $responsable;
     }
 
-    public function ajouterInscription(Inscription $inscription): void
+    public function setDateNaissance(\DateTime $dateNaissance): void
     {
-        $this->inscriptions[] = $inscription;
+        $this->dateNaissance = $dateNaissance;
+    }
+
+    public static function toEntity(\stdClass $obj): self
+    {
+
+
+        return new self(
+            nomcomplet: $obj->nomcomplet,
+            matricule: $obj->matricule,
+            responsable: Responsable::toEntity($obj),
+            dateNaissance: new \DateTime($obj->date_naissance)
+        );
     }
 }

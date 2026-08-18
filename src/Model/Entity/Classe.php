@@ -1,28 +1,51 @@
 <?php
 
-namespace App\Model\Entity;
+namespace GestionNotePooV2\Entity;
 
-class Classe {
-    public ?int $id;
-    public string $nomClasse;
-    public Etablissement $idEtablissement;
-    public array $inscriptions;
+class Classe
+{
+    private int $id;
+    private string $nom;
+    private Etablissement $etablissement;
 
-     public function __construct(?int $id, string $nomClasse,Etablissement $idEtablissement,array $inscriptions)
+    public function __construct(string $nom, Etablissement $etablissement)
+    {
+        $this->nom = $nom;
+        $this->etablissement = $etablissement;
+    }
+
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    public function getNom(): string
+    {
+        return $this->nom;
+    }
+
+    public function getEtablissement(): Etablissement
+    {
+        return $this->etablissement;
+    }
+
+    public function setId(int $id): void
     {
         $this->id = $id;
-        $this->libelle = $nomClasse;
-        $this->idEtablissement = $idEtablissement;
-        $this->inscriptions = $inscriptions;
     }
 
-    public function getInscription(): array
+    public function setNom(string $nom): void
     {
-        return $this->inscriptions;
+        $this->nom = $nom;
     }
 
-    public function ajouterInscription(Inscription $inscription): void
+    public function setEtablissement(Etablissement $etablissement): void
     {
-        $this->inscriptions[] = $inscription;
+        $this->etablissement = $etablissement;
+    }
+
+    public static function toEntity(\stdClass $obj): Classe
+    {
+        return new Classe(nom: $obj->classe, etablissement: Etablissement::toEntity($obj));
     }
 }

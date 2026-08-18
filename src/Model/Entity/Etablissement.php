@@ -1,24 +1,39 @@
 <?php
 
-namespace App\Model\Entity;
+namespace GestionNotePooV2\Entity;
 
-class Etablissement {
-    public ?int $id;
-    public string $nom;
-    public array $classes;
+class Etablissement
+{
+    private int $id;
+    private string $nom;
 
-    public function __construct(?int $id,string $nom,array $classes = []) {
-        $this->id = $id;
+    public function __construct(string $nom)
+    {
         $this->nom = $nom;
-        $this->classes = $classes;
-    }
-     public function getClasse(): array
-    {
-        return $this->classes;
     }
 
-    public function ajouterClasse(Eleve $classe): void
+    public function getId(): int
     {
-        $this->classes[] = $classe;
+        return $this->id;
+    }
+
+    public function getAnnee(): string
+    {
+        return $this->nom;
+    }
+
+    public function setId(int $id): void
+    {
+        $this->id = $id;
+    }
+
+    public function setnom(string $nom): void
+    {
+        $this->nom = $nom;
+    }
+
+    public static function toEntity(\stdClass $obj): Etablissement
+    {
+        return new Etablissement(nom: $obj->nometablissement);
     }
 }

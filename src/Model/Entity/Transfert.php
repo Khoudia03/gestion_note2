@@ -1,32 +1,74 @@
 <?php
 
-namespace App\Model\Entity;
+namespace GestionNotePooV2\Entity;
 
-class Transfert {
-    public int $id;
-    private string $type_de_transfert;
-    public Inscription $idInscription;
+class Transfert
+{
+    private int $id;
+    private string $etablissement_sortant;
+    private string $etablissement_entrant;
+    private Inscription $inscription;
+    private StatutTransfert $statut;
 
-    public function __construct() 
+    public function __construct(
+        string $etablissement_sortant,
+        string $etablissement_entrant,
+        Inscription $inscription,
+        StatutTransfert $statut
+    ) {
+        $this->etablissement_sortant = $etablissement_sortant;
+        $this->etablissement_entrant = $etablissement_entrant;
+        $this->inscription = $inscription;
+        $this->statut = $statut;
+    }
+
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    public function getEtablissemententrant(): string
+    {
+        return $this->etablissement_entrant;
+    }
+
+    public function getEtablissementSortant(): string
+    {
+        return $this->etablissement_sortant;
+    }
+
+    public function getInscription(): Inscription
+    {
+        return $this->inscription;
+    }
+
+    public function getStatut(): StatutTransfert
+    {
+        return $this->statut;
+    }
+
+    public function setId(int $id): void
     {
         $this->id = $id;
-        $this->type_de_transfert = $type_de_transfert;
-        $this->idInscription = $idInscription;
     }
 
-    public function getTypeTransfert() : string 
+    public function setEtablissemententrant(string $etablissement_entrant): void
     {
-
-        return $this->type_de_transfert;
+        $this->etablissement_entrant = $etablissement_entrant;
     }
 
-    public function setTypeTransfert(string $type_de_transfert) : void 
+    public function setEtablissementSortant(string $etablissement_sortant): void
     {
-
-        if($type_de_transfert == 'ENTRANT' || $type_de_transfert == 'SORTANT')
-        {
-            $this->type_de_transfert = $type_de_transfert;
-        }
+        $this->etablissement_sortant = $etablissement_sortant;
     }
 
+    public function setStatut(StatutTransfert $statut): void
+    {
+        $this->statut = $statut;
+    }
+
+    public function setInscription(Inscription $inscription): void
+    {
+        $this->inscription = $inscription;
+    }
 }

@@ -1,57 +1,56 @@
 <?php
 
-namespace App\Core;
+namespace GestionNotePooV2\Core;
 
-use PDO;
-use PDOException;
+
 
 class Database
 {
-    private static ?Database $instance = null;
 
-    private PDO $pdo;
+    private function __construct(){}
 
-    private function __construct()
+    private static function getInstance(): \PDO | null
     {
         try {
-            $this->pdo = new PDO(
-                "pgsql:host=localhost;port=5432;dbname=gestion_note2",
-                "postgres",
-                "Cisse0312@"
-            );
-
-            $this->pdo->setAttribute(
-                PDO::ATTR_ERRMODE,
-                PDO::ERRMODE_EXCEPTION
-            );
-
-        } catch (PDOException $e) {
-
-            $sqlitePath = dirname(__DIR__, 2) . "/gestion_appro_dette.db";
-
-            $this->pdo = new PDO(
-                "sqlite:" . $sqlitePath
-            );
-
-            $this->pdo->setAttribute(
-                PDO::ATTR_ERRMODE,
-                PDO::ERRMODE_EXCEPTION
-            );
-
+            $instance = null;
+            $dsn = "pgsql:host=localhost;dbname=gestion_note2";
+            $instance = new \PDO($dsn, "postgres", "Cisse0312@");
+            $instance->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+            return $instance;
+        } catch (\PDOException $e) {
+            error_log("Connexion PostgreSQL échouée : " . $e->getMessage());
+            return null;
         }
     }
 
-    public static function getInstance(): Database
+    public static function query(string $sql, bool $single = true): mixed
     {
-        if (self::$instance === null) {
-            self::$instance = new Database();
-        }
-
-        return self::$instance;
+        $query = self::getInstance()->query($sql);
+        return $single ? $query->fetch() : $query->fetchAll(\PDO::FETCH_OBJ);
     }
 
-    public function getConnection(): PDO
+    private static function prepare(string $sql, array $datas): \PDOStatement
     {
-        return $this->pdo;
+        $prepare = Database::getInstance()->prepare($sql);
+        $prepare->execute($datas);
+        return $prepare;
+    }
+
+    public static function executeQuery(string $sql, array $datas, bool $single = true): mixed
+    {
+        $statement = self::prepare($sql, $datas);
+        return $single ? $statement->fetch() : $statement->fetchAll(\PDO::FETCH_OBJ);
+    }
+
+    public static function executeUpdate(string $sql, array $datas): int|string
+    {
+        $statement = self::prepare($sql, $datas);
+        return (str_starts_with(strtoupper(trim($sql)), 'INSERT')) ? self::getInstance()->lastInsertId() : $statement->rowCount();
+    }
+
+    public static function getAllData(string $tableName): array
+    {
+        $sql = "SELECT * FROM $tableName";
+        return self::query($sql, false);
     }
 }

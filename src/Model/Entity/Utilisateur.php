@@ -1,35 +1,80 @@
 <?php
 
-namespace App\Model\Entity;
+namespace GestionNotePooV2\Entity;
 
 class Utilisateur
 {
-    public int $id;
-    public string $nom;
-    public string $prenom;
-    public string $email;
-    public string $motPasse;
-    public Role $role;
-    public array $inscriptions;
+    private int $id;
+    private string $nomcomplet;
+    private string $login;
+    private string $password;
+    private Role $role;
 
-    public function __construct(int $id,string $nom,string $prenom,string $email,string $motPasse,Role $role, array $inscriptions = [])
+    public function __construct(string $nomcomplet, string $login, string $password, Role $role)
+    {
+        $this->nomcomplet = $nomcomplet;
+        $this->login = $login;
+        $this->password = $password;
+        $this->role = $role;
+    }
+
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    public function getNomComplet(): string
+    {
+        return $this->nomcomplet;
+    }
+
+    public function getlogin(): string
+    {
+        return $this->login;
+    }
+
+    public function getPassword(): string
+    {
+        return $this->password;
+    }
+
+    public function getRole(): Role
+    {
+        return $this->role;
+    }
+
+    public function setId(int $id): void
     {
         $this->id = $id;
-        $this->nom = $nom;
-        $this->prenom = $prenom;
-        $this->email = $email;
-        $this->motPasse = $motPasse;
+    }
+
+    public function setNomComplet(string $nomcomplet): void
+    {
+        $this->nomcomplet = $nomcomplet;
+    }
+
+    public function setlogin(string $login): void
+    {
+        $this->login = $login;
+    }
+
+    public function setpassword(string $password): void
+    {
+        $this->password = $password;
+    }
+
+    public function setRole(ROle $role): void
+    {
         $this->role = $role;
-        $this->inscriptions = $inscriptions;
-    }
-    public function getInscription(): array
-    {
-        return $this->inscriptions;
     }
 
-    public function ajouterInscription(Eleve $inscription): void
+    public static function toEntity(\stdClass $obj): self
     {
-        $this->inscriptions[] = $inscription;
+        return new self(
+            nomcomplet: $obj->nomutilisateur,
+            login: $obj->login,
+            password: $obj->password,
+            role: Role::toEntity($obj)
+        );
     }
-
 }

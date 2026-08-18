@@ -1,7 +1,22 @@
-J'ai utilisé les tables roles,utilisateurs,anneeScolaires,classes,eleves et inscription parceque d'aprés ma compréhension je pense que pour réaliser l'image on aura besoin de ces tables.
+### Les Tables
+J'ai identifie 7 tables qui sont:
+  - annescolaire
+  - etablissement
+  - classe_etablissement
+  - responsable
+  - eleve
+  - inscription
+  - transfert
 
-Ici j'ai créé les même classes dans Entity parcequ'on a dit autant d'endity que de classe.
-Pour les conceptes j'ai utilisé les classes, les attributs et les methodes:
-Classe : il permet de décrire le modele des objets
-attributs : c'est les données ou caractéristiques des objets
-methodes : permet de dire les actions ou comportements des objets
+### Pourquoi ces tables ?
+  Ces tables nous permettrons d'avoir la liste des eleves et leurs information correspondante comme L'etablissement et la classe ou il est affecter son responsable l'etat de son affectation de l'annee scolaire courante
+  
+### Les concepts appliqu dans les entites
+  J'ai mis la visibilite des attributs a public et ca me permet de pourvoir faire des operation de lecture ou de modifcation de sont quand j'utilise l'objet.
+
+### Erreur de typage sur l'attribut nom
+
+- l'une se trouvait dans l'entite Etablissement 
+le type de nom etait  en int alors que  dans la base de donnee le type etait du string 
+- l'autre se trouvait dans l'entite Utilisateur 
+nomUtilisateur est en camel case  et la base de donnee le convertit en lowerCase 
