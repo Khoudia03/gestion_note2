@@ -8,7 +8,11 @@ class Role
     private string $nom_role;
     public array $utilisateurs;
 
-    public function __construct(?int $id,string $nom_role = 'Administrateur etablissement',array $utilisateurs = []) {
+    public function __construct(
+        ?int $id,
+        string $nom_role = 'Administrateur etablissement',
+        array $utilisateurs = []
+    ) {
         $this->id = $id;
         $this->nom_role = $nom_role;
         $this->utilisateurs = $utilisateurs;
@@ -21,8 +25,11 @@ class Role
 
     public function setNomRole(string $nom_role): void
     {
-        if ($nom_role == 'Administrateur etablissement' || $nom_role == 'Surveillant' || $nom_role == 'Professeur') 
-        {
+        if (
+            $nom_role == 'Administrateur etablissement' ||
+            $nom_role == 'Surveillant' ||
+            $nom_role == 'Professeur'
+        ) {
             $this->nom_role = $nom_role;
         }
     }
@@ -32,7 +39,7 @@ class Role
         return $this->utilisateurs;
     }
 
-    public function ajouterUtilisateur(Eleve $utilisateur): void
+    public function ajouterUtilisateur(Utilisateur $utilisateur): void
     {
         $this->utilisateurs[] = $utilisateur;
     }
